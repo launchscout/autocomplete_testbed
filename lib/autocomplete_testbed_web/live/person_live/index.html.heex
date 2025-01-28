@@ -1,0 +1,43 @@
+<.header>
+  Listing People
+  <:actions>
+    <.link patch={~p"/people/new"}>
+      <.button>New Person</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="people"
+  rows={@streams.people}
+  row_click={fn {_id, person} -> JS.navigate(~p"/people/#{person}") end}
+>
+  <:col :let={{_id, person}} label="First name">{person.first_name}</:col>
+  <:col :let={{_id, person}} label="Last name">{person.last_name}</:col>
+  <:col :let={{_id, person}} label="Organization">{person.organization && person.organization.name}</:col>
+  <:action :let={{_id, person}}>
+    <div class="sr-only">
+      <.link navigate={~p"/people/#{person}"}>Show</.link>
+    </div>
+    <.link patch={~p"/people/#{person}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, person}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: person.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="person-modal" show on_cancel={JS.patch(~p"/people")}>
+  <.live_component
+    module={AutocompleteTestbedWeb.PersonLive.FormComponent}
+    id={@person.id || :new}
+    title={@page_title}
+    action={@live_action}
+    person={@person}
+    patch={~p"/people"}
+  />
+</.modal>

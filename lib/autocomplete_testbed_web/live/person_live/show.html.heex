@@ -1,0 +1,30 @@
+<.header>
+  Person {@person.id}
+  <:subtitle>This is a person record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/people/#{@person}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit person</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="First name">{@person.first_name}</:item>
+  <:item title="Last name">{@person.last_name}</:item>
+  <:item title="Organization">
+    {if @person.organization, do: @person.organization.name, else: "None"}
+  </:item>
+</.list>
+
+<.back navigate={~p"/people"}>Back to people</.back>
+
+<.modal :if={@live_action == :edit} id="person-modal" show on_cancel={JS.patch(~p"/people/#{@person}")}>
+  <.live_component
+    module={AutocompleteTestbedWeb.PersonLive.FormComponent}
+    id={@person.id}
+    title={@page_title}
+    action={@live_action}
+    person={@person}
+    patch={~p"/people/#{@person}"}
+  />
+</.modal>
