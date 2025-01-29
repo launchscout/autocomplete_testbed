@@ -7,7 +7,7 @@ defmodule AutocompleteTestbedWeb.FeatureCase do
 
       import AutocompleteTestbedWeb.FeatureCase
 
-      import PhoenixTest
+      use PhoenixTest.Case
     end
   end
 

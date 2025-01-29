@@ -43,8 +43,6 @@ defmodule AutocompleteTestbedWeb.PersonLive.FormComponent do
 
   @impl true
   def update(%{person: person} = assigns, socket) do
-    organizations = Organizations.list_organizations()
-
     {:ok,
      socket
      |> assign(assigns)
@@ -65,7 +63,7 @@ defmodule AutocompleteTestbedWeb.PersonLive.FormComponent do
     {:noreply, assign(socket, organizations: Organizations.search_organizations(value))}
   end
 
-  def handle_event("autocomplete-commit", %{"value" => value}, socket) do
+  def handle_event("autocomplete-commit", %{"value" => _value}, socket) do
     {:noreply, assign(socket, organizations: [])}
   end
 

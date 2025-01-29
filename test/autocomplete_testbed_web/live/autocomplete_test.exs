@@ -1,12 +1,25 @@
 defmodule AutocompleteTestbedWeb.AutocompleteTest do
-  use PhoenixTest.Case
-  # @moduletag :playwright
+  use ExUnit.Case
+  use Wallaby.Feature
 
-  # @moduletag playwright: [headless: false, slow_mo: 1_000]
+  import Wallaby.Query
 
-  test "heading", %{conn: conn} do
-    conn
+  import AutocompleteTestbed.OrganizationsFixtures
+
+  feature "heading", %{session: session} do
+    _organization = organization_fixture(name: "Acme Foods")
+    _organization2 = organization_fixture(name: "Acme Stuff")
+    session = session
     |> visit("/people/new")
-    |> assert_has("h1", text: "New person")
+    |> assert_has(css("h1", text: "New Person"))
+    |> find(css("autocomplete-input"))
+    |> shadow_root()
+    |> click(css("span", text: "Choose an organization"))
+    |> fill_in(css("input"), with: "Acme")
+    |> assert_has(css("li", text: "Acme Foods"))
+    |> assert_has(css("li", text: "Acme Stuff"))
+    |> click(css("li", text: "Acme Foods"))
+    |> assert_has(css("span", text: "Acme Foods"))
   end
+
 end

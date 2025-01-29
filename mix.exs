@@ -59,7 +59,12 @@ defmodule AutocompleteTestbed.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:phoenix_test_playwright, "~> 0.1", only: :test, runtime: false},
-      {:live_elements, "~> 0.2.3", override: true}
+      {:live_elements, "~> 0.2.3", override: true},
+      {:wallaby, "~> 0.30.2",
+       git: "https://github.com/launchscout/wallaby.git",
+       branch: "shadow-dom",
+       runtime: false,
+       only: :test}
     ]
   end
 

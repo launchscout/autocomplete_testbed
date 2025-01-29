@@ -52,3 +52,10 @@ config :phoenix, :plug_init_mode, :runtime
 # Enable helpful, but potentially expensive runtime checks
 config :phoenix_live_view,
   enable_expensive_runtime_checks: true
+
+config :wallaby,
+  otp_app: :autocomplete_testbed,
+  base_url: "http://localhost:4002"
+  # chromedriver: [
+  #   headless: false
+  # ]

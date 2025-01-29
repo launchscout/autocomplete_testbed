@@ -20,15 +20,6 @@ export class AutocompleteInputElement extends LitElement {
     open: { type: Boolean, state: true },
   }
 
-  static get styles() {
-    return css`
-      li[aria-selected="true"] {
-        background-color: #e5edff;
-        border-left: 3px solid #3b82f6;
-      }
-    `;
-  }
-
   constructor() {
     super();
     this.searchValue = '';
@@ -126,6 +117,10 @@ export class AutocompleteInputElement extends LitElement {
       // when options appear, start intercepting keyboard events for navigation
       this.combobox.start();
       this.list.addEventListener('combobox-commit', (e) => this.onCommit(e));
+      this.list.addEventListener('combobox-select', (e) => {
+        this.list.querySelectorAll('li').forEach((li) => li.setAttribute('part', 'option'));
+        e.target.setAttribute('part', 'selected-option');
+      });
     }
   }
 
