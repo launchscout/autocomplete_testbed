@@ -85,6 +85,7 @@ export class AutocompleteInputElement extends LitElement {
   onKeyDown(e) {
     if (e.key == 'Escape') {
       this.cancel();
+      e.stopPropagation();
     }
     console.log(e);
   }
@@ -108,7 +109,7 @@ export class AutocompleteInputElement extends LitElement {
     if (this.clearListOnSelect) {
       this.list.replaceChildren();
     }
-    setTimeout(() => this.dispatchEvent(new CustomEvent('autocomplete-commit', { detail: target.dataset, bubbles: true })), 500);
+    this.dispatchEvent(new CustomEvent('autocomplete-commit', { detail: target.dataset, bubbles: true }));
   }
 
   get list() {

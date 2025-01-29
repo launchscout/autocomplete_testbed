@@ -3,6 +3,8 @@ defmodule AutocompleteTestbedWeb.PersonLive.FormComponent do
 
   alias AutocompleteTestbed.People
   alias AutocompleteTestbed.Organizations
+  alias AutocompleteTestbed.Organizations.Organization
+  alias AutocompleteTestbed.People.Person
 
   use LiveElements.CustomElementsHelpers
   custom_element(:autocomplete_input, events: ["autocomplete-search", "autocomplete-commit"])
@@ -27,7 +29,7 @@ defmodule AutocompleteTestbedWeb.PersonLive.FormComponent do
         <.input field={@form[:last_name]} type="text" label="Last name" />
         <div phx-feedback-for="organization_id">
           <.label for="autocomplete-organization">Organization</.label>
-          <.autocomplete_input name="person[organization_id]" id="autocomplete-organization" phx-target={@myself} items={@organizations} list="organization-list">
+          <.autocomplete_input name="person[organization_id]" display-value={@organization_name} id="autocomplete-organization" phx-target={@myself} items={@organizations}>
           </.autocomplete_input>
         </div>
 
@@ -47,6 +49,7 @@ defmodule AutocompleteTestbedWeb.PersonLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign(:organizations, [])
+     |> assign(:organization_name, organization_name(person))
      |> assign_new(:form, fn ->
        to_form(People.change_person(person))
      end)}
@@ -99,6 +102,9 @@ defmodule AutocompleteTestbedWeb.PersonLive.FormComponent do
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
+
+  defp organization_name(%Person{organization: %Organization{name: name}}), do: name
+  defp organization_name(%Person{}), do: "Choose an organization"
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
 end
