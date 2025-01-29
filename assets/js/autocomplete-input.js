@@ -14,7 +14,7 @@ export class AutocompleteInputElement extends LitElement {
     },
     items: { type: Array },
     debounce: { type: Number },
-    minlength: { type: Number },
+    minLength: { type: Number, attribute: 'min-length' },
     searchValue: { attribute: 'search-value' },
     clearListOnSelect: { attribute: 'clear-list-on-select', type: Boolean },
     open: { type: Boolean, state: true },
@@ -25,7 +25,7 @@ export class AutocompleteInputElement extends LitElement {
     this.searchValue = '';
     this.displayValue = 'Choose an organization';
     this.debounce = 300;
-    this.minlength = 3;
+    this.minLength = 3;
     this.items = [];
     this.elementInternals = this.attachInternals();
     this.addEventListener('focusout', (e) => {
@@ -35,7 +35,7 @@ export class AutocompleteInputElement extends LitElement {
 
   cancel() {
     this.open = false;
-    // setTimeout(() => this.dispatchEvent(new CustomEvent('autocomplete-close', { detail: { query: this.searchInput?.value } })));
+    this.items = [];
   }
 
   startSearch() {
@@ -82,7 +82,7 @@ export class AutocompleteInputElement extends LitElement {
   }
 
   onSearch(e) {
-    if (this.searchInput.value.length >= this.minlength) {
+    if (this.searchInput.value.length >= this.minLength) {
       this.elementInternals.states.add('searching');
       this.dispatchEvent(
         new CustomEvent('autocomplete-search', { detail: { query: this.searchInput.value } }));
@@ -98,7 +98,7 @@ export class AutocompleteInputElement extends LitElement {
       new FormData(this.elementInternals.form).forEach(console.debug);
     }
     if (this.clearListOnSelect) {
-      this.list.replaceChildren();
+      this.items = [];
     }
     this.dispatchEvent(new CustomEvent('autocomplete-commit', { detail: target.dataset, bubbles: true }));
   }

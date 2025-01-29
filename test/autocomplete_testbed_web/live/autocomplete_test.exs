@@ -6,7 +6,7 @@ defmodule AutocompleteTestbedWeb.AutocompleteTest do
 
   import AutocompleteTestbed.OrganizationsFixtures
 
-  feature "heading", %{session: session} do
+  feature "selecting an organization", %{session: session} do
     _organization = organization_fixture(name: "Acme Foods")
     _organization2 = organization_fixture(name: "Acme Stuff")
     session = session
@@ -20,6 +20,7 @@ defmodule AutocompleteTestbedWeb.AutocompleteTest do
     |> assert_has(css("li", text: "Acme Stuff"))
     |> click(css("li", text: "Acme Foods"))
     |> assert_has(css("span", text: "Acme Foods"))
+    |> refute_has(css("li", text: "Acme Stuff"))
   end
 
 end

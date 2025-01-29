@@ -29,7 +29,7 @@ defmodule AutocompleteTestbedWeb.PersonLive.FormComponent do
         <.input field={@form[:last_name]} type="text" label="Last name" />
         <div phx-feedback-for="organization_id">
           <.label for="autocomplete-organization">Organization</.label>
-          <.autocomplete_input name="person[organization_id]" display-value={@organization_name} id="autocomplete-organization" phx-target={@myself} items={@organizations}>
+          <.autocomplete_input name="person[organization_id]" min-length="2" display-value={@organization_name} id="autocomplete-organization" phx-target={@myself} items={@organizations}>
           </.autocomplete_input>
         </div>
 
@@ -61,10 +61,6 @@ defmodule AutocompleteTestbedWeb.PersonLive.FormComponent do
 
   def handle_event("autocomplete-search", %{"query" => value}, socket) do
     {:noreply, assign(socket, organizations: Organizations.search_organizations(value))}
-  end
-
-  def handle_event("autocomplete-commit", %{"value" => _value}, socket) do
-    {:noreply, assign(socket, organizations: [])}
   end
 
   def handle_event("save", %{"person" => person_params}, socket) do
