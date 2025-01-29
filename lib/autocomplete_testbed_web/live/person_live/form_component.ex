@@ -63,6 +63,10 @@ defmodule AutocompleteTestbedWeb.PersonLive.FormComponent do
     {:noreply, assign(socket, organizations: Organizations.search_organizations(value))}
   end
 
+  def handle_event("autocomplete-commit", _params, socket) do
+    {:noreply, socket |> assign(:organizations, [])}
+  end
+
   def handle_event("save", %{"person" => person_params}, socket) do
     save_person(socket, socket.assigns.action, person_params)
   end

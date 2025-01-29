@@ -4,6 +4,36 @@ import { LitElement, html, css } from 'lit';
 
 export class AutocompleteInputElement extends LitElement {
   static formAssociated = true;
+  static styles = css`
+    .input-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    input {
+      width: 100%;
+      padding-right: 30px; /* Make room for the cancel icon */
+    }
+    
+    .cancel-icon {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 18px;
+      color: #666;
+      border: none;
+      background: none;
+      padding: 4px;
+      line-height: 1;
+    }
+    
+    .cancel-icon:hover {
+      color: #333;
+    }
+  `;
 
   static properties = {
     value: {},
@@ -63,11 +93,13 @@ export class AutocompleteInputElement extends LitElement {
   render() {
     console.log(`In render, this.open: ${this.open}`);
     return this.open ? html`
-      <input name="${this.name}" .value="${this.searchValue}" @keydown=${this.onKeyDown} part="input" autocomplete="off" @input=${debounce((e) => this.onSearch(e), this.debounce)}>
-      <button @click=${this.cancel}>Cancel</button>
-      <ul part="list">
+      <div class="input-wrapper">
+        <input name="${this.name}" .value="${this.searchValue}" @keydown=${this.onKeyDown} part="input" autocomplete="off" @input=${debounce((e) => this.onSearch(e), this.debounce)}>
+        <button class="cancel-icon" @click=${this.cancel} aria-label="Clear input">×</button>
+      </div>
+      ${this.items.length > 0 ? html`<ul part="list">
         ${this.items.map((item) => html`<li role="option" part="option" data-value="${item.id}">${item.name}</li>`)}
-      </ul>
+      </ul>` : ''}
     ` : html`
       <span @click=${this.startSearch}>${this.displayValue}</span>
     `;
